@@ -2,21 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-// Function to decode a number from a given base
 long long decodeValue(const char *value, int base) {
     return strtoll(value, NULL, base);
 }
-
-// Function to find the Lagrange interpolation and calculate constant term
 long long lagrangeInterpolation(long long points[][2], int k) {
     long long result = 0;
-    
     for (int i = 0; i < k; i++) {
         long long xi = points[i][0];
         long long yi = points[i][1];
         long long term = yi;
-        
         for (int j = 0; j < k; j++) {
             if (i != j) {
                 long long xj = points[j][0];
@@ -24,58 +18,32 @@ long long lagrangeInterpolation(long long points[][2], int k) {
                 term /= (xi - xj);
             }
         }
-        
         result += term;
     }
-    
     return result;
 }
-
-// Function to parse the input dynamically
 void findConstantTerm() {
     int n, k;
-    
-    // Read number of points (n) and the minimum required points (k)
     printf("Enter number of points (n): ");
     scanf("%d", &n);
-    
     printf("Enter the minimum number of points (k): ");
     scanf("%d", &k);
-    
-    // Dynamically allocate the array for points (x, y)
     long long points[n][2];
-    
     // Loop to take inputs for each point
     for (int i = 0; i < n; i++) {
         int base;
         char value[50];
-        
-        // Read the x value
         printf("Enter x for point %d: ", i + 1);
         scanf("%lld", &points[i][0]);
-        
-        // Read the base for y value
         printf("Enter base for y value of point %d: ", i + 1);
         scanf("%d", &base);
-        
-        // Read the y value as a string (since it can be in different bases)
         printf("Enter y value of point %d (in base %d): ", i + 1, base);
         scanf("%s", value);
-        
-        // Decode the y value based on the base
         points[i][1] = decodeValue(value, base);
     }
-    
-    // Find constant term using Lagrange interpolation
     long long constantTerm = lagrangeInterpolation(points, k);
-    
-    // Print the constant term
     printf("Constant term (c): %lld\n", constantTerm);
 }
-
 int main() {
-    // Call the function to find the constant term
     findConstantTerm();
-
-    return 0;
 }
